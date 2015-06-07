@@ -1,0 +1,236 @@
+ 
+
+
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<link rel="stylesheet" type="text/css" href="/zzwfcl/css/main/master.css"/>
+<link rel="stylesheet" type="text/css" href="/zzwfcl/css/main/login.css"/>
+<meta name="description" content="舟山互联网自助违法处理平台"/>
+<meta name="keywords" content="舟山互联网自助违法处理平台"/>
+<script type="text/javascript" src="/zzwfcl/js/AC_RunActiveContent.js"  ></script>
+<script type="text/javascript" src="/zzwfcl/js/jquery/jquery-1.4.2.js"></script>
+<script type="text/javascript" src="/zzwfcl/js/wfcl/tools.js"></script>
+<script type='text/javascript' src='/zzwfcl/dwr/engine.js'></script>
+<script type='text/javascript' src='/zzwfcl/dwr/util.js'></script>
+<script type='text/javascript' src='/zzwfcl/dwr/interface/SysUserServiceJS.js'></script>
+<title>违法信息查询 - 舟山互联网自助违法处理平台 </title>
+</head>
+
+<body>
+<div><img src="/zzwfcl/images/main/web_03.jpg" /></div>
+<div class="container">
+	<div><a href="/zzwfcl"  ><img src="/zzwfcl/images/wfcl/logo.jpg" /></a></div>
+   <div class="register">
+        <dl class="news">
+        	<form name="clxxForm" id="clxxForm" action="/zzwfcl/vio.do?act=veh_vio_save" method="post">
+			<table width="100%" border="0" cellspacing="0" cellpadding="0" class="diaryTable">
+				<tr>
+					<td class="rit" width="24%">车牌种类</td>
+					<td width="15%">
+						<select name="hpzl" id="hpzl" style="width:152px;" >
+		                    
+		                    <option value="01"    >01:大型汽车</option>
+		                    
+		                    <option value="02"  selected  >02:小型汽车</option>
+		                    
+		                    <option value="03"    >03:使馆汽车</option>
+		                    
+		                    <option value="04"    >04:领馆汽车</option>
+		                    
+		                    <option value="05"    >05:境外汽车</option>
+		                    
+		                    <option value="06"    >06:外籍汽车</option>
+		                    
+		                    <option value="07"    >07:普通摩托车</option>
+		                    
+		                    <option value="08"    >08:轻便摩托车</option>
+		                    
+		                    <option value="09"    >09:使馆摩托车</option>
+		                    
+		                    <option value="10"    >10:领馆摩托车</option>
+		                    
+		                    <option value="11"    >11:境外摩托车</option>
+		                    
+		                    <option value="12"    >12:外籍摩托车</option>
+		                    
+		                    <option value="13"    >13:农用运输车</option>
+		                    
+		                    <option value="14"    >14:拖拉机</option>
+		                    
+		                    <option value="15"    >15:挂车</option>
+		                    
+		                    <option value="16"    >16:教练汽车</option>
+		                    
+		                    <option value="17"    >17:教练摩托车</option>
+		                    
+		                    <option value="18"    >18:试验汽车</option>
+		                    
+		                    <option value="19"    >19:试验摩托车</option>
+		                    
+		                    <option value="20"    >20:临时入境汽车</option>
+		                    
+		                    <option value="21"    >21:临时入境摩托车</option>
+		                    
+		                    <option value="22"    >22:临时行驶车</option>
+		                    
+		                    <option value="23"    >23:警用汽车</option>
+		                    
+		                    <option value="24"    >24:警用摩托</option>
+		                    
+                		</select>
+					</td>
+					<td class="rit" width="10%" >车牌号码</td>
+					<td width="25%">
+					<select name="fzjg" id="fzjg" style="width:40px;" >
+		                <option value="浙" selected >浙</option>
+		                <option value="藏"  >藏</option>
+		                <option value="川"  >川</option>
+		                <option value="鄂"  >鄂</option>
+		                <option value="甘"  >甘</option>
+		                <option value="赣"  >赣</option>
+		                <option value="桂"  >桂</option>
+		                <option value="贵"  >贵</option>
+		                <option value="黑"  >黑</option>
+		                <option value="沪"  >沪</option>
+		                <option value="吉"  >吉</option>
+		                <option value="冀"  >冀</option>
+		                <option value="津"  >津</option>
+		                <option value="晋"  >晋</option>
+		                <option value="京"  >京</option>
+		                <option value="辽"  >辽</option>
+		                <option value="鲁"  >鲁</option>
+		                <option value="蒙"  >蒙</option>
+		                <option value="闽"  >闽</option>
+		                <option value="宁"  >宁</option>
+		                <option value="青"  >青</option>
+		                <option value="琼"  >琼</option>
+		                <option value="陕"  >陕</option>
+		                <option value="苏"  >苏</option>
+		                <option value="皖"  >皖</option>
+		                <option value="湘"  >湘</option>
+		                <option value="新"  >新</option>
+		                <option value="渝"  >渝</option>
+		                <option value="豫"  >豫</option>
+		                <option value="粤"  >粤</option>
+		                <option value="云"  >云</option>
+               		 </select>
+						<input type="text" value="LD8006" name="hphm" id="hphm" maxlength="8" />
+					</td>
+				</tr>
+				<tr>
+					<td class="rit"  >车辆识别代号（车架号）末6位字符</td>
+					<td >
+						<input type="text" value="P42513" name="clsbdh" id="clsbdh" maxlength="6" />
+					</td>
+					<td colspan="2" align="center" ><input type="button" value=" 查 询 " onclick="queryVehVio();" class="bt" /> </td>
+				</tr>
+			</table>
+			</form>
+			<br/>
+			
+			   <div id="waitingDiv" >
+				<table width="100%" border="0" cellspacing="0" cellpadding="0" class="diaryTable" >
+             	 	 <tr>
+             	 	 	<td align="center" height="120" valign="middle" >
+             	 	 	<img src="/zzwfcl/images/loading.gif" style="vertical-align: middle;" /> 正在为您同步您的车辆违法信息，请稍后！ 在此期间建议不要做任何操作。 
+             	 	 	</td>
+             	 	 </tr>
+             	 </table>
+             	</div>
+			
+			
+			
+</div><!--mainLeft-->
+<div class="clear"></div>
+   <form name="vehVioForm" id="vehVioForm" action="/zzwfcl/vio.do?act=veh_vio_query" method="post">
+   		<input type="hidden" value="浙" name="fzjg" id="fzjg" />
+   		<input type="hidden" value="02" name="hpzl" id="hpzl" />
+   		<input type="hidden" value="LD8006" name="hphm" id="hphm" />
+   		<input type="hidden" value="P42513" name="clsbdh" id="clsbdh" />
+   </form>
+<div id="logoutDiv" style="display: none;" ></div>
+
+<script type="text/javascript" >
+	var waitTime;
+	//获取机动车违法信息
+	function sycnVehVioInfo(){
+		var sfzmhm = "02:浙LD8006:P42513";
+		if(sfzmhm == "") return;
+		SysUserServiceJS.checkSynchronizeStatus(sfzmhm,function(result){
+			if(result == "0" )return;
+			if(result == "3") {
+				clearTimer();
+				document.getElementById("waitingDiv").style.display = "none";
+				alert("操作提示：当前操作用户过多，请您稍后再试！");
+				return;
+			}
+			if(result == "4") {
+				clearTimer();
+				document.getElementById("waitingDiv").style.display = "none";
+				alert("操作提示：获取车辆信息失败，请您核实输入信息！");
+				return;
+			}
+			if(result == "2"){
+				clearTimer();
+				document.getElementById("waitingDiv").style.display = "none";
+				alert("操作提示：您输入的车辆识别代号（车架号）末尾6位与您实际的车辆识别代号（车架号）不一致，请检查后重新输入。");
+				return;
+			}
+			//清除定时器
+			clearTimer();
+			//提交违法查询表单
+			waitTimer = window.setInterval("submitForm()",15*1000);		
+		});
+	}
+	function clearTimer(){
+		window.clearInterval(getInfoTimer);
+		getInfoTimer == null;
+	}
+	function submitForm(){
+		window.clearInterval(waitTimer);
+		waitTimer == null;
+		document.vehVioForm.submit()
+	}
+	//定时器，5秒钟刷一次，获取用户车辆及驾驶人信息
+	var getInfoTimer = setInterval("sycnVehVioInfo()",5000);
+</script>
+
+<script type="text/javascript">
+	function queryVehVio(){
+		var hpzl = document.getElementById("hpzl");
+		var hphm = document.getElementById("hphm");
+		var clsbdh = document.getElementById("clsbdh");
+		if(hpzl.value == ""){
+			alert("操作提示：请选择车牌种类。");
+			hpzl.focus();
+			return;
+		}
+		if(trim(hphm.value) == ""){
+			alert("操作提示：请输入您的车牌号码。");
+			hphm.value = trim(hphm.value);
+			hphm.focus();
+			return;
+		}
+		if(trim(clsbdh.value) == ""){
+			alert("操作提示：请输入您的车辆识别代号（车架号）。");
+			clsbdh.value = trim(clsbdh.value);
+			clsbdh.focus();
+			return;
+		}
+		hphm.value = hphm.value.toUpperCase();
+		clsbdh.value = clsbdh.value.toUpperCase();
+		document.clxxForm.submit();
+	}
+</script>
+</div>
+
+<div class="footer mid">CopyRights &copy; 2011 舟山市公安局交通警察支队 版权所有  杭州诚道科技有限公司 提供技术支持<br/>
+<div style="float:right;margin-top:-35px; margin-right:50px;"><img src="/zzwfcl/images/dzjg.png"/><div/>
+<div>
+
+</body>
+</html>

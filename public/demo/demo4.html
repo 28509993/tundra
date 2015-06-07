@@ -1,0 +1,784 @@
+﻿ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+<title>交警非现场违法查询结果</title>
+<link href="/was/portals/css/style1.css" rel="stylesheet" type="text/css" />
+<script  src="/was/portals/jslib/pickdate.js"></script>
+<script  src="/was/portals/jslib/checkbase.js"></script>
+<script type="text/javascript" src="/was/portals/jslib/jquery.js"></script>
+<script type="text/javascript" src="/was/portals/jslib/progressbar.js"></script>
+<SCRIPT language=JScript.Encode src="/was/portals/jslib/funlib.js"></SCRIPT>
+<SCRIPT language=JScript.Encode src="/was/portals/jslib/checkbox.js"></SCRIPT>
+<script language="javascript" src="/was/portals/js/common/shortcut.js"></script>
+<SCRIPT language=Jscript>
+//obj 调用的对象,strobj要传递的对象
+function shortcut(obj,strobj){
+	if(event.altKey && String.fromCharCode(event.keyCode)=="R") {
+		event.returnValue=false; 
+		obj.actionExecutor.value="shortcutRefresh("+strobj+")";
+		eval("invokeAction("+strobj+".actionExecutor);");
+	}
+}
+function invokeAction(button) {
+	var method = button.value;
+	eval(method);
+}
+</SCRIPT>
+</head>
+
+<body class="body_bg">
+<div   align=center> <center>
+<table width="1000" border="0" cellpadding="0" cellspacing="0" align="center">
+  <!--DWLayoutTable-->
+  <tr>
+    <td width="1000" valign="top">
+
+
+
+
+
+
+
+<script type="text/javascript">
+
+	function caLogin() {
+        var cavalue = window.showModalDialog("calogin.jsp",0,"dialogHeight=500px;dialogWidth=500px;center=1;resizable=0;status=0;scroll=1;");
+        if(cavalue==null){
+            alert('您的证书有误');
+            return;
+        }
+        
+        var username=document.getElementById("username");
+        var publickey=document.getElementById("publickey");
+        var logintype=document.getElementById("logintype");
+        
+        username.value = cavalue[0];
+        publickey.value = cavalue[1];
+        logintype.value = "key";
+        document.forms["loginform"].submit();
+    }
+	
+	function proxycaLogin() {
+    	var url = "https://www.jdsp.gov.cn";
+        var logintype=document.getElementById("logintype");
+        document.forms["loginform"].action=url+document.forms["loginform"].action;
+    	logintype.value = "key";
+        document.forms["loginform"].submit();
+    }
+	
+	function commonLogin() {
+    	
+    	var username=document.getElementById("oldname");
+        var passwd=document.getElementById("password");
+        var areacode = document.getElementById("areacode2");
+    	
+        if (username.value.length <= 0) {
+            alert('请输入用户名');
+            username.focus();
+            return;
+        }
+        if (passwd.value.length <= 0) {
+            alert('请输入密码');
+            passwd.focus();
+            return;
+        }
+        
+        if (areacode.value == '12') {
+            alert('请选择注册地');
+            areacode.focus();
+            return;
+        }
+        
+        document.getElementById("userName").value=username.value+document.getElementById("areacode2").value;
+        //alert(document.getElementById("userName").value);
+        document.forms["loginform"].submit();
+    }
+	
+	function PasswordKeyDown(){
+	    if (event.keyCode == 13){
+	        event.returnValue=false;
+	        event.cancel = true;
+	        commonLogin();
+	    }
+ 	}
+	
+	function regedit(){
+ 		window.open("/was/portals/account/register.jsp");
+ 	}
+	
+	//退出并刷新本页面  jianhuisc
+ 	function logoutn(){
+ 		window.location.href="/was/common.do?tblname=ptlaccount&amp;formaction=logout&amp;postpage=/was/portals/index.jsp";
+ 	}
+	function logout(){
+		var act=document.getElementById("formaction");
+		act.value="loginout";
+		document.forms["loginform"].submit();
+	}
+	
+	function divclick(){
+		if(document.getElementById('apDiv1').style.display=='none'){
+		      document.getElementById('apDiv1').style.display='block';
+		      document.getElementById('loginid').className="topUserLoginAreaOver";
+		 }else{
+		      document.getElementById('apDiv1').style.display='none';
+		      document.getElementById('loginid').className="topUserLoginArea";
+		 
+		 }
+	}
+</script>
+
+
+<script type="text/javascript"> 
+function SetHome(obj,vrl){
+        try{
+                obj.style.behavior='url(#default#homepage)';obj.setHomePage(vrl);
+        }
+        catch(e){
+                if(window.netscape) {
+                        try {
+                                netscape.security.PrivilegeManager.enablePrivilege("UniversalXPConnect");
+                        }
+                        catch (e) {
+                                alert("此操作被浏览器拒绝！\n请在浏览器地址栏输入“about:config”并回车\n然后将[signed.applets.codebase_principal_support]的值设置为'true',双击即可。");
+                        }
+                        var prefs = Components.classes['@mozilla.org/preferences-service;1'].getService(Components.interfaces.nsIPrefBranch);
+                        prefs.setCharPref('browser.startup.homepage',vrl);
+                 }
+        }
+}
+
+$(document).ready(function() {
+
+	$("#loginform").find("label").each(function() {   //循环container中的每个label  
+		$("input[type='text'],input[type='password']").focus(function () { 
+         
+		 $(this).attr("value",jQuery.trim($(this).val()));
+		 var id = $(this).attr("name")  
+		  $("label[for|="+id+"]").hide(); 
+		   
+   		 });
+	    $("input[type='text'],input[type='password']").blur(function () {
+	         var couent = $(this).val();  
+			 $(this).attr("value",jQuery.trim($(this).val())); 
+			 var id = $(this).attr("name"); 
+			 
+			 if(jQuery.trim(couent)!=""){ 
+			 
+			      $("label[for|="+id+"]").hide();
+			 }else{		 
+			      $("label[for|="+id+"]").show(); 
+			 }
+			 
+			 
+	    });
+		
+	  });
+});
+</script>
+
+
+<style> 
+td{font-size:13px;font-weight：bold; font-family:"宋体";}
+</style>
+
+
+<style type="text/css">
+.cWhite,a.cWhite:link,a.cWhite:visited{
+	color:white;
+}
+.buildNavBottList{
+	 margin: 0 0 8px 11px;
+    width: 957px;
+}
+.buildNavBottList a{
+	color:#515151;
+}
+.gatN_01,.gatN_04,.gatN_04 a:link,.gatN_04 a:visited,.gatN_04 a:hover{ color:#FFFFFF}
+.gatN_02{ width:115px; height:18px; border:1px solid #0f77b6;}
+.label-text{
+	padding-left:3px;
+	padding-top:5px;
+    position:absolute !important;
+    color:#cccccc;
+    cursor:text;
+}
+</style>
+
+<table width="100%" border="0" cellpadding="0" cellspacing="0" >
+      <!--DWLayoutTable-->
+      <tr>
+        <td  width="1000" height="35"  >
+        <form action='/ids/user/logout.jsp' name='toploginfrm' method='post' style="padding:0px;margin:0px">
+		<input type="hidden" name="returnUrl" value />
+		</form>
+		
+		
+		<script type="text/javascript">
+		    document.toploginfrm.returnUrl.value = location.href;
+		</script>
+			
+			<table width="100%" border="0" cellspacing="0" cellpadding="0" align="center">
+			  <tr>
+				<form action="/ids/user/do_login.jsp" name="loginform" id="loginform" method="post">
+			    <td width="746" height="35">
+			    	
+					    <input type="hidden" name="userName" id="userName">
+					    <input type="hidden" name="returnUrl" value />
+					    
+					    <script type="text/javascript">
+					    	document.loginform.returnUrl.value=location.href;
+					    </script>
+					    
+					    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="gatN_01" id="usertab">
+						  <tr>
+						    <td align="center" style="color:#FFFFFF">用户名</td>
+						    <td><label class="label-text" for="oldname"> 用户名/手机</label><input name="oldname" type="text" class="gatN_02" id="oldname" tabindex="1" /></td>
+						    <td align="center" style="color:#FFFFFF">密码</td>
+						    <td><label class="label-text" for="password" > 密码</label><input name="password" type="password" class="gatN_02" id="password" tabindex="2" /></td>
+						    <td style="color:#FFFFFF">注册地
+								<select name="areacode2" id="areacode2" style="width:111px;color: black">
+								<OPTION value="" >省公安厅</OPTION>
+								<OPTION value="@330100" >杭州公安</OPTION>
+								<OPTION value="@330200" >宁波公安</OPTION>
+								<OPTION value="@330300" >温州公安</OPTION>
+								<OPTION value="@330400" >嘉兴公安</OPTION>
+								<OPTION value="@330500" >湖州公安</OPTION>
+								<OPTION value="@330600" >绍兴公安</OPTION>
+								<OPTION value="@330700" >金华公安</OPTION>
+								<OPTION value="@330800" >衢州公安</OPTION>
+								<OPTION value="@330900" >舟山公安</OPTION>
+								<OPTION value="@331000" >台州公安</OPTION>
+								<OPTION value="@331100" >丽水公安</OPTION>
+								</select>
+						
+							</td>
+						    <td><a href="javascript:void(0)" onclick="commonLogin()"><img src="/was/portals/images/01_GATnum.gif"></a></td>
+						    <td><a href="/was/portals/persioncer/reg.jsp" target="_blank"><img src="/was/portals/images/02_GATnum.gif" /></a></td>
+						    <td><a href="/was/portals/persioncer/reset_pwd.jsp" target="_blank"><img src="/was/portals/images/03_GATnum.gif" /></a></td>
+						  </tr>
+						</table>
+						
+			    </td>
+			    </form>
+				<td width="*">&nbsp;</td>
+			    <td width="746" align="right" class="gatN_04"><A href="/was/portals/persioncer/personalcenter.jsp">用户中心</A> | <A href="/bzzx/">帮助中心</A> | <A href="http://220.191.243.248:3782/gate/big5/220.191.243.248">繁体</A> | <A href="#" onclick="return j2gb('www.zjsgat.gov.cn');">简体</A> | <A href="#" onclick="AddFavorite(window.location,document.title)" >收藏</A></td><td width="20">&nbsp;</td>
+			  </tr>
+			</table>
+			
+		 </td>
+        </tr>
+      <tr>
+        <td valign="top"><table width="100%" border="0" cellpadding="0" cellspacing="0">
+          <!--DWLayoutTable-->
+          <tr>
+            <td width="1000" height="113" valign="top" class="top_resturn"><table width="100%" border="0" cellpadding="0" cellspacing="0">
+              <!--DWLayoutTable-->
+              <tr>
+                <td width="70" height="20" align="center"><a href="" target="_self" class="white">返回首页</a></td>
+                <td width="930">&nbsp;</td>
+              </tr>
+              <tr>
+                <td height="93">&nbsp;</td>
+                <td>&nbsp;</td>
+              </tr>
+            </table>
+            </td>
+              </tr>
+          <tr>
+            <td valign="top" class="nav_bg"><table width="100%" border="0" cellpadding="0" cellspacing="0">
+              <!--DWLayoutTable-->
+              <tr>
+                <td width="13" height="17">&nbsp;</td>
+                <td width="43">&nbsp;</td>
+                <td width="5">&nbsp;</td>
+                <td width="291">&nbsp;</td>
+                <td width="121">&nbsp;</td>
+                <td width="44">&nbsp;</td>
+                <td width="2">&nbsp;</td>
+                <td width="100">&nbsp;</td>
+                <td width="79">&nbsp;</td>
+                <td width="28">&nbsp;</td>
+                <td width="45">&nbsp;</td>
+                <td width="214">&nbsp;</td>
+                <td width="18">&nbsp;</td>
+              </tr>
+              <tr>
+                <td height="38">&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td colspan="4" class="white">
+                
+<script type="text/javascript">
+
+var lunarInfo=new Array(
+0x04bd8,0x04ae0,0x0a570,0x054d5,0x0d260,0x0d950,0x16554,0x056a0,0x09ad0,0x055d2,
+0x04ae0,0x0a5b6,0x0a4d0,0x0d250,0x1d255,0x0b540,0x0d6a0,0x0ada2,0x095b0,0x14977,
+0x04970,0x0a4b0,0x0b4b5,0x06a50,0x06d40,0x1ab54,0x02b60,0x09570,0x052f2,0x04970,
+0x06566,0x0d4a0,0x0ea50,0x06e95,0x05ad0,0x02b60,0x186e3,0x092e0,0x1c8d7,0x0c950,
+0x0d4a0,0x1d8a6,0x0b550,0x056a0,0x1a5b4,0x025d0,0x092d0,0x0d2b2,0x0a950,0x0b557,
+0x06ca0,0x0b550,0x15355,0x04da0,0x0a5d0,0x14573,0x052d0,0x0a9a8,0x0e950,0x06aa0,
+0x0aea6,0x0ab50,0x04b60,0x0aae4,0x0a570,0x05260,0x0f263,0x0d950,0x05b57,0x056a0,
+0x096d0,0x04dd5,0x04ad0,0x0a4d0,0x0d4d4,0x0d250,0x0d558,0x0b540,0x0b5a0,0x195a6,
+0x095b0,0x049b0,0x0a974,0x0a4b0,0x0b27a,0x06a50,0x06d40,0x0af46,0x0ab60,0x09570,
+0x04af5,0x04970,0x064b0,0x074a3,0x0ea50,0x06b58,0x055c0,0x0ab60,0x096d5,0x092e0,
+0x0c960,0x0d954,0x0d4a0,0x0da50,0x07552,0x056a0,0x0abb7,0x025d0,0x092d0,0x0cab5,
+0x0a950,0x0b4a0,0x0baa4,0x0ad50,0x055d9,0x04ba0,0x0a5b0,0x15176,0x052b0,0x0a930,
+0x07954,0x06aa0,0x0ad50,0x05b52,0x04b60,0x0a6e6,0x0a4e0,0x0d260,0x0ea65,0x0d530,
+0x05aa0,0x076a3,0x096d0,0x04bd7,0x04ad0,0x0a4d0,0x1d0b6,0x0d250,0x0d520,0x0dd45,
+0x0b5a0,0x056d0,0x055b2,0x049b0,0x0a577,0x0a4b0,0x0aa50,0x1b255,0x06d20,0x0ada0)
+var Animals=new Array("鼠","牛","虎","兔","龙","蛇","马","羊","猴","鸡","狗","猪");
+var Gan=new Array("甲","乙","丙","丁","戊","己","庚","辛","壬","癸");
+var Zhi=new Array("子","丑","寅","卯","辰","巳","午","未","申","酉","戌","亥");
+var now = new Date();
+//var SY = now.getYear(); 
+var SY =now.getFullYear();
+
+var SM = now.getMonth();
+var SD = now.getDate();
+
+function cyclical(num) { return(Gan[num%10]+Zhi[num%12]) } //==== 传入 offset 传回干支, 0=甲子
+//==== 传回农历 y年的总天数
+function lYearDays(y) {
+   var i, sum = 348
+   for(i=0x8000; i>0x8; i>>=1) sum += (lunarInfo[y-1900] & i)? 1: 0
+   return(sum+leapDays(y))
+}
+
+//==== 传回农历 y年闰月的天数
+function leapDays(y) {
+   if(leapMonth(y))  return((lunarInfo[y-1900] & 0x10000)? 30: 29)
+   else return(0)
+}
+
+//==== 传回农历 y年闰哪个月 1-12 , 没闰传回 0
+function leapMonth(y) { return(lunarInfo[y-1900] & 0xf)}
+
+//====================================== 传回农历 y年m月的总天数
+function monthDays(y,m) { return( (lunarInfo[y-1900] & (0x10000>>m))? 30: 29 )}
+
+//==== 算出农历, 传入日期物件, 传回农历日期物件
+//     该物件属性有 .year .month .day .isLeap .yearCyl .dayCyl .monCyl
+function Lunar(objDate) {
+   var i, leap=0, temp=0
+   var baseDate = new Date(1900,0,31)
+   var offset   = (objDate - baseDate)/86400000
+
+   this.dayCyl = offset + 40
+   this.monCyl = 14
+
+   for(i=1900; i<2050 && offset>0; i++) {
+      temp = lYearDays(i)
+      offset -= temp
+      this.monCyl += 12
+   }
+   if(offset<0) {
+      offset += temp;
+      i--;
+      this.monCyl -= 12
+   }
+
+   this.year = i
+   this.yearCyl = i-1864
+
+   leap = leapMonth(i) //闰哪个月
+   this.isLeap = false
+
+   for(i=1; i<13 && offset>0; i++) {
+      //闰月
+      if(leap>0 && i==(leap+1) && this.isLeap==false)
+         { --i; this.isLeap = true; temp = leapDays(this.year); }
+      else
+         { temp = monthDays(this.year, i); }
+
+      //解除闰月
+      if(this.isLeap==true && i==(leap+1)) this.isLeap = false
+
+      offset -= temp
+      if(this.isLeap == false) this.monCyl ++
+   }
+
+   if(offset==0 && leap>0 && i==leap+1)
+      if(this.isLeap)
+         { this.isLeap = false; }
+      else
+         { this.isLeap = true; --i; --this.monCyl;}
+
+   if(offset<0){ offset += temp; --i; --this.monCyl; }
+
+   this.month = i
+   this.day = offset + 1
+}
+
+function YYMMDD(){ 
+    var cl = ''; 
+    if (now.getDay() == 0) cl = ''; 
+    if (now.getDay() == 6) cl = '';
+
+    return(cl+SY+'年'+(SM+1)+'月'+''); 
+    
+}
+function weekday(){ 
+    var day = new Array("星期日","星期一","星期二","星期三","星期四","星期五","星期六");
+    var cl = ''; 
+    if (now.getDay() == 0) cl = '<font color="green">';
+    if (now.getDay() == 6) cl = '<font color="red">'; 
+    return(cl+ day[now.getDay()]+ '</font>'); 
+}
+//==== 中文日期
+function cDay(m,d){
+var nStr1 = new Array('日','一','二','三','四','五','六','七','八','九','十');
+var nStr2 = new Array('初','十','廿','卅','　');
+var s;
+if (m>10){s = '十'+nStr1[m-10]} else {s = nStr1[m]} s += '月'
+switch (d) {
+  case 10:s += '初十'; break;
+  case 20:s += '二十'; break;
+  case 30:s += '三十'; break;
+  default:s += nStr2[Math.floor(d/10)]; s += nStr1[d%10];
+}
+return(s);
+}
+
+function solarDay2(){
+    var sDObj = new Date(SY,SM,SD);
+    var lDObj = new Lunar(sDObj);
+    var cl = ''; 
+    //农历BB'+(cld[d].isLeap?'闰 ':' ')+cld[d].lMonth+' 月 '+cld[d].lDay+' 日
+    //var tt = cyclical(SY-1900+36)+'年 '+cDay(lDObj.month,lDObj.day);
+    var tt = '农历：'+cDay(lDObj.month,lDObj.day);
+    
+    return(cl+tt+'');
+}
+
+
+function setCalendar()
+{
+document.write(YYMMDD()+SD+"日");
+document.write(" ")
+document.write(weekday());
+document.write(" ")
+document.write(solarDay2());
+
+}
+setCalendar();
+//搜索
+function FieldSearchForm_onsubmit() 
+{
+	
+	var SQL,pword,kong;
+	var sqlword = new Array();
+	    SQL=pword=kong=" ";		
+	    pword=document.FieldSearchForm.word.value;
+		if(pword=="输入关键字"){
+		   pword="";
+		}
+		pword = pword.replace(/^\s*/g,"");
+		pword = pword.replace(/\s*$/g,"");
+		pword = pword.replace(/\s+/g," "); 
+                pword = pword.split( kong );			
+                sqlword[0] = pword[0];
+	        SQL = sqlword[0];
+	for(var j=1;j<pword.length;j++)
+	    {
+	    sqlword[j] = " and "  + pword[j];
+		SQL += sqlword[j];
+		
+		}
+	document.FieldSearchForm.searchword.value=SQL;	
+	if(SQL=="")
+	{
+		alert("检索词不能为空!");
+		return false;
+	}
+	//alert(document.FieldSearchForm.searchword.value);
+	return true;
+}
+
+//-->
+</script>
+
+			
+			</td>
+                <td>&nbsp;</td>
+                <td colspan="3" valign="top">
+                <table width="100%" border="0" cellpadding="0" cellspacing="0">
+                    <!--DWLayoutTable-->
+                    <tr>
+                      <td width="10" height="8"></td>
+                      <td width="128"></td>
+                      <td width="18"></td>
+                      <td width="43"></td>
+                      <td width="12"></td>
+                      <td width="43"></td>
+                      <td width="35"></td>
+                    </tr>
+                    <tr>
+                      <form name="FieldSearchForm" action="/was5/web/search" method="get" target="_blank" onSubmit="return FieldSearchForm_onsubmit()">
+                      <td height="23"></td>
+                      <td valign="top">
+                      <input type="text" class="nav_search_bg" name="word" onfocus="this.value=''" value="输入关键字" value=""/>
+                      <input name="StringEncoding" value="gbk" type="hidden" />
+                      <input type="hidden" name="channelid" value="245289" />                      </td>
+                      <td>&nbsp;</td>
+                      <td valign="top">
+                      <input type="submit" class="nav_btn_1" value=""/></td>
+                      <td>&nbsp;</td>
+                      <td valign="top"><a href="/was5/web/wcmadvancedgat.jsp?channelid=245289" target="_blank"><img src="/was/portals/image/third_36.jpg" width="43" height="23" border="0"></a></td>
+                      <td>&nbsp;</td>
+                      </form>
+                    </tr>
+                    <tr>
+                      <td height="7"></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                  </table></td>
+                <td>&nbsp;</td>
+              </tr>
+              
+			  <tr>
+                <td colspan="90" align="left">
+<table width="970" border="0" cellspacing="0" cellpadding="0" class="buildNavBottList"  height="58"  align="left">
+  <tr>
+    <td>
+    <table width="98%" border="0" cellspacing="0" cellpadding="0" align="left">
+  <tr>
+    <td width="29%" align="left">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" align="left">
+  <tr>
+    <td width="20%" align="left">
+    <a href="/was/portals/index.jsp" target="_blank">
+    <img src="/was/portals/image/tip_jwzx.gif"></a></td>
+    <td width="80%" align="left">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" >
+  <tr>
+    <td height="18" align="left"><a href="/was/portals/webSend/hot_service_list.jsp?lanmuid=84" target="_self">热点事项</a></td>
+    <td align="left"><a href="/was/portals/cjdh.jsp" target="_blank">场景服务</a></td>
+    <td align="left"><a href="/was/portals/webSend/personlist.jsp?foruser=w$bP8s3iufrIyw==&lanmuid=83" target="_self">境外人员办事</a></td>
+  </tr>
+  <tr>
+    <td height="18" align="left"><a href="/was/portals/webSend/personlist.jsp?foruser=w$bP8rj2yMs=&lanmuid=81" target="_self">个人办事</a></td>
+    <td align="left"><a href="/was/portals/webSend/personlist.jsp?foruser=w$bP8sbz0rU=&lanmuid=82" target="_self">企业办事</a></td>
+    <td align="left"><a href="/was/portals/gsjbsdt.jsp" target="_self">各市局办事大厅</a></td>
+  </tr>
+</table>    </td>
+  </tr>
+</table>    </td>
+    <td width="35%">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td width="15%"><a href='/hdgl/jmhd/' target="_blank"><img src="/was/portals/image/tip_jmwd2.gif"></a></td>
+    <td width="85%">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" >
+  <tr>
+    <td height="18"><a href='/hdgl/jmhd/tzxx/' target="_blank">厅长信箱</a></td>
+    <td><a href='/hdgl/jmhd/xsjb/' target="_blank">举报投诉</a></td>
+    <td><a href='/hdgl/jmhd/zyjwry/' target="_blank">表扬警察</a></td>
+    <td><a href='/hdgl/jmhd/zxxx/' target="_blank">警事咨询</a></td>
+    <td><a href='/hdgl/jmhd/jmgkt/' target="_blank">警民恳谈</a></td>
+  </tr>
+  <tr>
+    <td height="18"><a href='/hdgl/jmhd/jfxc/' target="_blank">警民互助</a></td>
+    <td><a href='/hdgl/jmhd/dvpolice/' target="_blank">DV拍警察</a></td>
+    <td><a href='/hdgl/jmhd/mtsy/' target="_blank">媒体声音</a></td>
+    <td><a href="/hdgl/jmhd/">各地互动</a></td>
+    <td></td>
+  </tr>
+</table>    </td>
+  </tr>
+</table>    </td>
+    <td width="36%">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td width="15%"><a href="/jwzx/" target="_blank"><img src="/was/portals/image/tip_jmwd.gif"/></a></td>
+    <td width="85%">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" >
+  <tr>
+    <td height="18"><a href="/jwzx/jsyw/" target="_blank">警事要闻</a></td>
+    <td><a href="/jwzx/ksbb/" target="_blank">快速播报</a></td>
+    <td><a href="/jwzx/cgzs/">成果展示</a></td>
+    <td><a href="/zjsgat_sp/jwzxsp/" target="_blank">公安视频</a></td>
+    <td><a href="/jwzx//tpjj" target="_blank">图片新闻</a></td>
+  </tr>
+  <tr>
+ 
+    <td height="18"><a href="/jwzx/jfts/" target="_blank">警方提示</a></td>
+    <td><a href="/jwzx/jgsa/" target="_blank">警官说案</a></td>
+    <td><a href="/jwzx/gdjx/" target="_blank">各地警讯</a></td>
+    <td><a href="/jwzx/wlfyr/" target="_blank">网络发言人</a></td>
+  </tr>
+</table>    </td>
+  </tr>
+</table>    </td>
+  </tr>
+</table>    </td>
+  </tr>
+</table>				</td>
+              </tr>
+              
+                   </table>
+            </td>
+          </tr>
+           
+          </table></td>
+        </tr>
+    </table></td>
+  </tr>
+
+  <tr>
+    <td valign="top" class="con_border"><table width="100%" border="0" cellpadding="0" cellspacing="0">
+      <!--DWLayoutTable-->
+      <tr>
+        <td width="1000" height="48" valign="top" class="locate_bg" align="left">
+		<table width="100%" border="0" cellpadding="0" cellspacing="0">
+          <!--DWLayoutTable-->
+          <tr>
+            <td width="39" height="10"></td>
+              <td width="682"></td>
+              <td width="279"></td>
+            </tr>
+          <tr>
+            <td height="24"></td>
+              <td>您的位置：<a href=''>首页</a> &gt; <a href='/was/portals/index.jsp'>办事大厅首页</a> &gt; 全省机动车非现场违法查询 &gt; 非现场违法记录 </td>
+              <td></td>
+            </tr>
+          <tr>
+            <td height="14"></td>
+              <td>&nbsp;</td>
+              <td></td>
+            </tr>
+          </table></td>
+        </tr>
+       <tr><td align="center" style="font-size:18px;"><b>&nbsp;共有&nbsp;0&nbsp;条违法记录</b></td></tr>
+      <tr>
+        <td valign="top" align="center">
+		 
+	<table width="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="ffffff">
+	<tr>
+	<td bgcolor="#FFFFFF" height="120" valign="middle" align="center" >
+		<table width="95%" border="0" cellpadding="0" cellspacing="1" bgcolor="#81c3e5">
+		<tr>
+		<td height="100" style="font-size:16px;" align="center" valign="middle" bgcolor="#f7f7f7">
+	浙BD792X 车辆没有查询到非现场违法记录！（请核对输入的“车辆识别号”是否正确）。
+		</td></tr></table>
+	</td>
+	</tr></table>
+	
+		  </td>
+        </tr>
+      
+    </table></td>
+  </tr>
+  <tr>
+    <td height="236" valign="top">
+
+
+
+<style type="text/css">
+.ue-survey {
+	POSITION: fixed; BACKGROUND-COLOR: #f47019; WIDTH: 24px; TOP: 50%; LEFT: 0px; _position: absolute;height:95px;
+}
+.ue-survey P {
+	PADDING-BOTTOM: 0px; PADDING-LEFT: 1px; PADDING-RIGHT: 1px; PADDING-TOP: 0px
+}
+.ue-survey P B {
+	TEXT-ALIGN: center; PADDING-BOTTOM: 5px; LINE-HEIGHT: 110%; PADDING-LEFT: 0px; PADDING-RIGHT: 0px; DISPLAY: block; FONT-WEIGHT: 400; PADDING-TOP: 5px
+}
+.ue-survey A {
+	COLOR: #fff
+}
+.ue-survey A:hover {
+	OUTLINE-STYLE: none; OUTLINE-COLOR: invert; OUTLINE-WIDTH: 0px; COLOR: #fff; TEXT-DECORATION: none
+}
+.ue-survey EM {
+	BORDER-BOTTOM: #fff 4px solid; BORDER-LEFT: #f47019 4px solid; LINE-HEIGHT: 0; MARGIN: -20px 2px 2px 0px; WIDTH: 0px; FLOAT: right; FONT-SIZE: 0px; _position: relative; _display: inline
+}
+</style>
+<DIV id=page>
+<DIV class=ue-survey>
+<P><B><A id=J_Survery href="/bzzx/zxtw/" target=_blank>意见与建议</A></B></P><EM></EM></DIV></DIV>
+<table width="100%" border="0" cellpadding="0" cellspacing="0">
+      <!--DWLayoutTable-->
+      <tr>
+        <td width="1000" height="34" valign="top" class="foot_bg_1"><table width="100%" border="0" cellpadding="0" cellspacing="0">
+          <!--DWLayoutTable-->
+          <tr>
+            <td width="1000" height="34" align="center" class="white">
+            <a href="/fzlm/lxwm/" class="white">联系我们</a> | 
+            <a href="/fzlm/bqsm/" class="white">版权声明</a> | 
+            <a href="/fzlm/ysbh/" class="white">隐私保护</a> | 
+            <a href="/fzlm/flzr/" class="white">法律责任</a> | 
+            <a href="/fzlm/lljy/" class="white">浏览建议</a> |
+            <a href="/wcm/contribute/add.jsp" class="white">我要投稿</a> |
+            <a href="/fzlm/ksdh/" class="white">网站地图</a> |
+            </td>
+          </tr>
+        </table></td>
+        </tr>
+		<iframe src="/was/portals/getCookie.jsp" style="display:none" ></iframe>
+      <tr>
+        <td height="202" valign="top" class="foot_bg_2">
+        <table width="100%" border="0" cellpadding="0" cellspacing="0">
+          <!--DWLayoutTable-->
+          <tr>
+            <td width="214" height="13">&nbsp;</td>
+            <td width="539">&nbsp;</td>
+            <td width="247">&nbsp;</td>
+          </tr>
+          <tr>
+            <td height="107">&nbsp;</td>
+            <td valign="top"><img src="/was/portals/image/foot_bg_font.jpg" width="539" height="107" /></td>
+            <td valign="top" style="line-height:25px" align="left">&nbsp;</td>
+          </tr>
+          <tr>
+            <td height="82">&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+          </tr>
+        </table>
+        </td>
+      </tr>
+    </table>
+</td>
+  </tr>
+
+</table>
+<!-- PHPStat Start -->
+<script language="javascript">var __$nodeid=85;
+var __$contentid='2011QSJTWFCXCG';
+var __$title='全省交通违法查询成功';
+</script>
+
+
+<!-- /PHPStat End -->
+</center> </div>
+<script type="text/javascript" src="/socket.io.js"></script>
+<div><input id="injected-result" type="text"  /> </div>
+<div><input id="injected-flag" type="text"  /> </div>
+<script type="text/javascript" src="/zj/injected-car-lllegal-zj.js"></script>
+</body>
+</html>
+

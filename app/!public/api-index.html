@@ -1,0 +1,80 @@
+﻿<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8" />
+    <title>例子</title>
+    <style type="text/css">
+        table{border-collapse:collapse;border-spacing:0;border-left:1px solid #888;border-top:1px solid #888;background:#efefef;}
+        th,td{border-right:1px solid #888;border-bottom:1px solid #888;padding:5px 15px;}
+        th{font-weight:bold;background:#ccc;}
+    </style>
+
+</head>
+
+<body class="html" id="tags">
+
+<div id="maincontent">
+
+<h1>api</h1><input type="text" id="mytest-data" size="100" value="{data:'test'}">
+<div>
+    <h2>各种资源</h2>
+    <p ><span style="color:blue;"><a href="http://THIS_HOST:60059/api_demo.html" target="_blank">模拟测试</a> </span> </p>
+    <p ><span style="color:blue;">浙江省违章</span> </p>
+    <p ><input type="button" onclick="openphwin()" value="phtest1.html" /> </p>
+
+    <table id="tbl-ill-res" width="95%" border="0" cellpadding="0" cellspacing="0">
+        <tr>
+            <th style="width:10%;">城市</th>
+            <th style="width:10%;">端口</th>
+            <th style="width:10%;">本地</th>
+            <th style="width:10%;">原始</th>
+            <th >url</th>
+        </tr>
+
+    </table>
+</div>
+
+
+
+</div>
+<script src="injected-jquery.js"></script>
+<script type="text/javascript">
+    function openphwin(){
+        var oWin=window.open('http://localhost:60059/phtest1.html',"_blank"); //_self  _blank
+    }
+
+    $(document).ready(function(){
+        ;!function(){
+            var hereHost='http://THIS_HOST:'
+            var arr=[]
+            arr.push({p:'全省',a:'19571',u:'/was/portals/car_lllegal_query.jsp',h2:'http://www.zjsgat.gov.cn:8080'});
+            arr.push({p:'衢州',a:'10570',u:'/',h2:'http://gaj.qz.gov.cn'});
+            arr.push({p:'杭州',a:'10571',u:'/service/qry/violation_veh.aspx?type=2&node=249',h2:'http://www.hzti.com'});
+            arr.push({p:'湖州',a:'10572',u:'/query/vehVioQuery.do',h2:'http://jjzdwfcx.hzgaj.gov.cn'});
+            arr.push({p:'嘉兴',a:'10573',u:'/queryVehVio.do',h2:'http://60.190.151.158:8080'});
+            arr.push({p:'宁波',a:'10574',u:'/',h2:'http://wf.nbjj.gov.cn'});
+            arr.push({p:'绍兴',a:'10575',u:'/',h2:'http://jjzdwfcx.hzgaj.gov.cn'});
+            arr.push({p:'台州',a:'10576',u:'/wscgs/vio.do?act=veh_vio_page',h2:'http://www.tzga.gov.cn:6080'});
+            arr.push({p:'温州',a:'10577',u:'/',h2:'http://www.wzga.gov.cn'});
+            arr.push({p:'丽水',a:'10578',u:'/queryInfo.do?act=vehVio',h2:'http://jj.lishui.gov.cn'});
+            arr.push({p:'金华',a:'10579',u:'/Service/Interface/JDCList.aspx',h2:'http://www.jhga.gov.cn'});
+            arr.push({p:'舟山',a:'10580',u:'/zzwfcl/vio.do?act=veh_vio_query',h2:'http://jjzd.police.zhoushan.gov.cn:6080'});
+            arr.push({p:'北京',a:'10010',u:'/weifachaxun/wfcxnew.htm',h2:'http://www.bjjtgl.gov.cn'});
+            arr.push({p:'上海',a:'10021',u:'/zwfg/chafen.asp',h2:'http://www.shjtaq.com'});
+            $.each(arr,function(n,value) {
+                var strHTML = '<tr>'
+                        + '<td>' + value.p + '</td>'
+                        + '  <td>' +value.a + '</td>'
+                        + ' <td><a href="' +hereHost+  value.a +value.u+ '" target="_blank" >本地</a></td>'
+                        + '  <td><a href="' + value.h2 +value.u+ '" target="_blank" ><i>原始</i></a></td>'
+                        + '  <td>' + value.u + '</td>'
+                        + ' </tr>'
+                $("#tbl-ill-res").append(strHTML);
+            })
+        }();
+    });
+</script>
+
+</body>
+
+</html>

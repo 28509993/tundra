@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8" />
+    <title>模拟例子</title>
+    <style type="text/css">
+        table{border-collapse:collapse;border-spacing:0;border-left:1px solid #888;border-top:1px solid #888;background:#efefef;}
+        th,td{border-right:1px solid #888;border-bottom:1px solid #888;padding:5px 15px;}
+        th{font-weight:bold;background:#ccc;}
+    </style>
+
+</head>
+
+<body class="html" id="tags">
+
+<div id="maincontent">
+
+    <h1>api</h1>
+    <div>
+        <h2>测试demo</h2>
+        <table width="95%" border="0" cellpadding="0" cellspacing="0">
+            <tr>
+                <th style="width:10%;">接口</th>
+                <th >receiveXTask</th>
+                <th style="width:10%;">操作</th>
+            </tr>
+            <tr>
+                <td >任务发起</td>
+                <td > <input type="text" id="receiveXTask-value" size="100" value='{"seq":"23232","carMark":"浙BD792X","carIdent": "065026","carKind": "02","busiType":"illegal","DEBUG":"1"}' /><input type="text" id="receiveXTask-result" size="20" /></td>
+                <td > <input type="button" id="receiveXTask-btn" value="测试"/> <input type="button" id="phantomdemo-btn" value="demo"/></td>
+            </tr>
+            <tr>
+                <td >结果</td>
+                <td >
+                    <input type="text" id="returnXTask-data" size="120" />
+                </td>
+                <td ></td>
+            </tr>
+            <tr>
+                <td ></td>
+                <!--<td ><div style="text-align:left;"><img id="pageviewxZoom" src="" ></div></td>-->
+                <td > <div style="float:left;width: 400px;height:300px;"><img id="pageviewxZoom" src="" width="100%" height="100%"></div>
+                   <div style="float:left;width: 400px; height:300px;"><img id="postXIicImg" src="" ></div>
+
+                </td >
+                <td >
+                    <div >
+                        <input type="text" id="setXIic-value" size="20" />
+                        <input type="hidden" id="iic-seq" size="20" />
+                        <input type="button" id="setXIic-btn" value="输入验证码"/>
+                        </div>
+
+                </td>
+            </tr>
+        </table>
+    </div>
+
+</div>
+<script src="injected-jquery.js"></script>
+<script src="injected-base64.js"></script>
+<script src="socket.io.js"></script>
+<script type="text/javascript">
+
+    function _arrayBufferToBase64( buffer ) {
+        var binary = '';
+        var bytes = new Uint8Array( buffer );
+        var len = bytes.byteLength;
+        for (var i = 0; i < len; i++) {
+            binary += String.fromCharCode( bytes[ i ] );
+        }
+        //console.log(binary);
+        return binary;
+        //return window.btoa( binary );
+    }
+    $(document).ready(function(){
+        var socket = io.connect('ws://THIS_HOST:60059/iicdemo', { 'reconnect': true });
+        socket.on('connection', function (data) {
+            //{icc:'2355666',value:'1122'}
+            console.log('111111111111')
+
+        });
+        socket.on('saveTask', function (data) {
+            console.log(JSON.stringify(data))
+            $("#returnXTask-data").val(JSON.stringify(data));
+        });
+
+        socket.on('notifyiicSeq', function (data) {
+            $("#iic-seq").val(data);
+        });
+        socket.on('validateImg', function (data) {
+            var str='data:image/png;base64,';
+            str= (data instanceof ArrayBuffer)?_arrayBufferToBase64(data):data;
+            //str='data:image/png;base64,'+str;
+            console.log('validateImg--length='+str.length)
+            $("#postXIicImg").attr("src",str);
+        });
+
+        socket.on('pageviewXZoom', function (data) {
+            var str='data:image/png;base64,';
+            str= (data instanceof ArrayBuffer)?_arrayBufferToBase64(data):data;
+            str='data:image/png;base64,'+str;
+            console.log('pageviewXZoom--length='+str.length)
+            $("#pageviewxZoom").attr("src",str);
+        });
+        //
+        $("#receiveXTask-btn").click(function(){
+            var taskdata=$("#receiveXTask-value").val();
+            try{
+                taskdata=JSON.parse(taskdata);
+            }catch(e){
+                alert('输入的数据错误!');
+                return ;
+            }
+            taskdata.seq=(new Date()).getTime()+''+(Math.random()*100>>>0);
+            //taskdata.seq=143056201666039+''
+            $("#receiveXTask-value").val(JSON.stringify(taskdata));
+            $("#receiveXTask-result").val('')
+            $("#returnXTask-data").val('')
+            $("#pageviewxZoom").attr("src",'');
+            var url='/setTask';
+            $.get(url,taskdata,function(data,status,xhr){
+                if (status==='success'){
+                    $("#receiveXTask-result").val(JSON.stringify(data))
+                    socket.emit('bindSeq',taskdata);
+                }
+            });
+        });
+        $("#phantomdemo-btn").click(function(){
+            var taskdata=$("#receiveXTask-value").val();
+            try{
+                taskdata=JSON.parse(taskdata);
+            }catch(e){
+                alert('输入的数据错误!');
+                return ;
+            }
+            taskdata.busiType='demo';
+            $("#receiveXTask-value").val(JSON.stringify(taskdata));
+            $("#receiveXTask-btn").trigger("click");
+
+        });
+
+        $("#setXIic-btn").click(function(){
+            if (!($("#setXIic-value").val())) return ;
+            var url='/imgValue?seq='+$("#iic-seq").val()+'&value='+$("#setXIic-value").val();
+            $.get(url,function(data,status,xhr){
+                if (status==='success'){
+                    $("#setXIic-value").val('')
+                }
+            });
+        });
+        //setXIic-value allReady
+
+    });
+
+</script>
+</body>
+
+
+
+</html>

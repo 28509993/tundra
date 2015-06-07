@@ -1,0 +1,39 @@
+{
+  "name": "tundra",
+  "version": "0.0.0",
+  "private": true,
+  "description": "desc",
+  "main": "main.js",
+  "scripts": {
+    "start": "node ./main"
+  },
+  "author": "ecartoo",
+  "dependencies": {
+    "express": "^4.12.3",
+    "gulp-rename": "^1.2.0",
+    "punycode": "^1.3.2",
+    "q": "^1.2.0",
+    "querystring": "^0.2.0",
+    "text-encoding": "^0.5.2",
+    "zlib": "^1.0.5",
+      "react": "^0.13.3"
+  },
+  "devDependencies": {
+    "event-stream": "^3.3.0",
+    "gulp": "^3.8.11",
+    "gulp-rename": "^1.2.0",
+    "gulp-util": "^3.0.4",
+    "log4js": "^0.6.22",
+    "reactify": "^1.1.1"
+  },
+  "browserify": {
+    "transform": [
+      [
+        "reactify",
+        {
+          "es6": false
+        }
+      ]
+    ]
+  }
+}
